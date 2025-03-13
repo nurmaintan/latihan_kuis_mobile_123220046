@@ -17,7 +17,11 @@ class _LoginPageState extends State<LoginPage> {
         _passwordController.text == 'fulan') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(
+          builder: (context) => HomePage(
+            username: _usernameController.text,
+          ),
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

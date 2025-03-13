@@ -11,7 +11,8 @@ class FoodItem {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final String username;
+  const HomePage({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,16 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Food Menu'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Halo @$username'),
+            const Text(
+              'Mau makan apa hari ini?',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -47,21 +57,31 @@ class HomePage extends StatelessWidget {
               width: double.infinity,
               fit: BoxFit.cover,
             ),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Food Menu',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12), // Reduced padding
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.65, // Adjusted ratio to give more height
+                crossAxisSpacing: 12, // Reduced spacing
+                mainAxisSpacing: 12, // Reduced spacing
+                childAspectRatio: 0.75, // Adjusted ratio
               ),
               itemCount: menu.length,
               itemBuilder: (context, index) {
                 return Card(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min, // Add this
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
                         flex: 3,
@@ -74,8 +94,9 @@ class HomePage extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: Padding(
-                          padding: const EdgeInsets.all(4.0), // Reduced padding
+                          padding: const EdgeInsets.all(2.0), // Reduced padding further
                           child: Column(
+                            mainAxisSize: MainAxisSize.min, // Added this
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
@@ -83,23 +104,23 @@ class HomePage extends StatelessWidget {
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Text('Rp ${menu[index].price}'),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => OrderPage(
-                                            item: menu[index],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text('Order'),
+                              SizedBox( // Removed extra padding around button
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(vertical: 8), // Reduced button padding
                                   ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => OrderPage(
+                                          item: menu[index],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('Order'),
                                 ),
                               ),
                             ],

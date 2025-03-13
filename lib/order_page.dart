@@ -11,7 +11,14 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-  int quantity = 1;
+  final _quantityController = TextEditingController(text: '1');
+  int get quantity => int.tryParse(_quantityController.text) ?? 1;
+
+  @override
+  void dispose() {
+    _quantityController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +47,18 @@ class _OrderPageState extends State<OrderPage> {
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    if (quantity > 1) {
-                      setState(() => quantity--);
-                    }
-                  },
-                  icon: const Icon(Icons.remove),
-                ),
-                Text('$quantity'),
-                IconButton(
-                  onPressed: () => setState(() => quantity++),
-                  icon: const Icon(Icons.add),
-                ),
-              ],
+            TextField(
+              controller: _quantityController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Quantity',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  // Force rebuild to update total price
+                });
+              },
             ),
             const SizedBox(height: 20),
             Text(
